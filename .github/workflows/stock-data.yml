@@ -1,0 +1,54 @@
+name: YOYO Stock Data Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-stock-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test SPY daily stock data
+        env:
+          API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import json
+          import urllib.parse
+          import urllib.request
+
+          key = os.environ.get("API_KEY", "")
+
+          if not key:
+              raise SystemExit("ERROR: API key missing")
+
+          params = urllib.parse.urlencode({
+              "function": "TIME_SERIES_DAILY",
+              "symbol": "SPY",
+              "outputsize": "compact",
+              "apikey": key
+          })
+
+          url = "https://www.alphavantage.co/query?" + params
+
+          with urllib.request.urlopen(url, timeout=30) as response:
+              data = json.load(response)
+
+          candles = data.get("Time Series (Daily)")
+
+          if not candles:
+              print("API did not return daily candles.")
+              print("Response type:", list(data.keys()))
+              raise SystemExit(1)
+
+          dates = sorted(candles.keys(), reverse=True)
+
+          print("SUCCESS: SPY daily data connected")
+          print("Available candles:", len(dates))
+          print("Latest trading date:", dates[0])
+          print("Latest daily close:", candles[dates[0]]["4. close"])
+          PY
