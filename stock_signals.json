@@ -1,0 +1,142 @@
+{
+  "SPY": {
+    "symbol": "SPY",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:19:17.668680+00:00",
+    "close": 771.79,
+    "volume_ratio": 1.02,
+    "support": 757.971,
+    "resistance": 781.62,
+    "bb20_2": {
+      "upper": 782.1189,
+      "middle": 771.106,
+      "lower": 760.0931
+    },
+    "bb20_3": {
+      "upper": 787.6254,
+      "middle": 771.106,
+      "lower": 754.5866
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "QQQ": {
+    "symbol": "QQQ",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:19:32.728493+00:00",
+    "close": 728.0,
+    "volume_ratio": 1.45,
+    "support": 715.08,
+    "resistance": 762.86,
+    "bb20_2": {
+      "upper": 762.1164,
+      "middle": 743.1015,
+      "lower": 724.0866
+    },
+    "bb20_3": {
+      "upper": 771.6239,
+      "middle": 743.1015,
+      "lower": 714.5791
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "IWM": {
+    "symbol": "IWM",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:19:47.806448+00:00",
+    "close": 275.08,
+    "volume_ratio": 1.27,
+    "support": 270.35,
+    "resistance": 288.94,
+    "bb20_2": {
+      "upper": 287.184,
+      "middle": 279.994,
+      "lower": 272.804
+    },
+    "bb20_3": {
+      "upper": 290.7789,
+      "middle": 279.994,
+      "lower": 269.2091
+    },
+    "signal": "CALL",
+    "reason": "Experimental lower-band reversal and volume confirmation",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "DIA": {
+    "symbol": "DIA",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:20:02.908313+00:00",
+    "close": 521.18,
+    "volume_ratio": 1.11,
+    "support": 504.7,
+    "resistance": 522.805,
+    "bb20_2": {
+      "upper": 521.2324,
+      "middle": 514.484,
+      "lower": 507.7356
+    },
+    "bb20_3": {
+      "upper": 524.6066,
+      "middle": 514.484,
+      "lower": 504.3614
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "NVDA": {
+    "symbol": "NVDA",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:20:17.971527+00:00",
+    "close": 217.23,
+    "volume_ratio": 1.19,
+    "support": 212.85,
+    "resistance": 243.37,
+    "bb20_2": {
+      "upper": 239.5869,
+      "middle": 228.584,
+      "lower": 217.5811
+    },
+    "bb20_3": {
+      "upper": 245.0883,
+      "middle": 228.584,
+      "lower": 212.0797
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  }
+}
