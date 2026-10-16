@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   stock-signal:
@@ -25,3 +25,13 @@ jobs:
           name: yoyo-stock-signal
           path: stock_signal.json
           if-no-files-found: error
+
+      - name: Publish signal to website
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add stock_signal.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update stock signal"
+            git push
+          fi
