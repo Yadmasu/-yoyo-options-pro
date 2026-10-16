@@ -1,0 +1,27 @@
+name: YOYO Stock Signal
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stock-signal:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run stock signal
+        env:
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+        run: python3 stock_signal.py
+
+      - name: Upload signal result
+        uses: actions/upload-artifact@v4
+        with:
+          name: yoyo-stock-signal
+          path: stock_signal.json
+          if-no-files-found: error
