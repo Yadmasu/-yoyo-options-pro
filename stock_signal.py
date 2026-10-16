@@ -5,7 +5,8 @@ import os
 import time
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+import urllib.error
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 SYMBOLS = (
@@ -135,7 +136,7 @@ def stock(symbol):
 
 
 def tradier_options(symbol):
-    """Fetch real Tradier options data when a token is configured."""
+    """Use Tradier only if its token is configured."""
 
     if not TRADIER:
         return {
@@ -262,8 +263,10 @@ def tradier_options(symbol):
 
 def massive_options(symbol):
     """
-    Fetch actual Massive options snapshots.
-    No invented contracts, prices or premiums.
+    Massive reference contracts endpoint.
+
+    Contract / strike / expiration are actual listed metadata.
+    Bid, ask, premium, entry, stop and targets are NOT invented.
     """
 
     if not MASSIVE:
@@ -283,7 +286,7 @@ def massive_options(symbol):
     by_dte = {
         label: {
             'status': 'UNAVAILABLE',
-            'reason': 'No eligible contract returned'
+            'reason': 'No eligible listed contract returned'
         }
         for label in windows
     }
@@ -293,10 +296,22 @@ def massive_options(symbol):
         for label in windows
     }
 
+    start_date = (today + timedelta(days=14)).isoformat()
+    end_date = (today + timedelta(days=90)).isoformat()
+
+    params = {
+        'underlying_ticker': symbol,
+        'expiration_date.gte': start_date,
+        'expiration_date.lte': end_date,
+        'expired': 'false',
+        'limit': 1000,
+        'sort': 'expiration_date',
+        'order': 'asc'
+    }
+
     url = (
-        'https://api.massive.com/v3/snapshot/options/'
-        + urllib.parse.quote(symbol, safe='')
-        + '?limit=250'
+        'https://api.massive.com/v3/reference/options/contracts?'
+        + urllib.parse.urlencode(params)
     )
 
     headers = {
@@ -305,11 +320,9 @@ def massive_options(symbol):
     }
 
     try:
-        # Follow pagination only when Massive returns a next_url.
-        # Bound requests to prevent excessive API usage.
         pages = 0
 
-        while url and pages < 10:
+        while url and pages < 5:
             raw = fetch(url, headers)
             pages += 1
 
@@ -317,12 +330,8 @@ def massive_options(symbol):
                 if not isinstance(item, dict):
                     continue
 
-                details = item.get('details') or {}
-                quote = item.get('last_quote') or {}
-                day = item.get('day') or {}
-
-                expiration = details.get('expiration_date')
-                contract_type = details.get('contract_type')
+                expiration = item.get('expiration_date')
+                contract_type = item.get('contract_type')
 
                 try:
                     days = (
@@ -338,13 +347,13 @@ def massive_options(symbol):
 
                 contract = {
                     'type': contract_type.upper(),
-                    'strike': details.get('strike_price'),
+                    'strike': item.get('strike_price'),
                     'expiration': expiration,
-                    'symbol': details.get('ticker'),
-                    'bid': quote.get('bid'),
-                    'ask': quote.get('ask'),
-                    'volume': day.get('volume'),
-                    'open_interest': item.get('open_interest')
+                    'symbol': item.get('ticker'),
+                    'bid': None,
+                    'ask': None,
+                    'volume': None,
+                    'open_interest': None
                 }
 
                 for label, (start, end) in windows.items():
@@ -356,7 +365,6 @@ def massive_options(symbol):
             if not next_url:
                 break
 
-            # Never send the token in a public URL.
             url = next_url
 
         for label, contracts in contracts_by_window.items():
@@ -379,7 +387,8 @@ def massive_options(symbol):
                 'status': 'AVAILABLE',
                 'expiration': chosen_expiration,
                 'contracts': selected,
-                'source': 'Massive',
+                'source': 'Massive Reference',
+                'quotes_available': False,
                 'updated_at_utc': datetime.now(timezone.utc).isoformat()
             }
 
@@ -391,23 +400,28 @@ def massive_options(symbol):
         return {
             'status': 'AVAILABLE' if available else 'UNAVAILABLE',
             'by_dte': by_dte,
-            'source': 'Massive',
+            'source': 'Massive Reference',
+            'quotes_available': False,
             'updated_at_utc': datetime.now(timezone.utc).isoformat()
+        }
+
+    except urllib.error.HTTPError as exc:
+        return {
+            'status': 'UNAVAILABLE',
+            'reason': 'HTTP ' + str(exc.code) + ' from Massive reference API',
+            'source': 'Massive Reference'
         }
 
     except Exception as exc:
         return {
             'status': 'UNAVAILABLE',
             'reason': str(exc)[:160],
-            'source': 'Massive'
+            'source': 'Massive Reference'
         }
 
 
 def options(symbol):
-    """
-    Prefer Massive when configured.
-    Fall back to Tradier only if a token exists.
-    """
+    """Prefer Massive; use Tradier only if available."""
 
     if MASSIVE:
         result = massive_options(symbol)
@@ -443,9 +457,7 @@ def main():
     if not isinstance(existing, dict):
         existing = {}
 
-    # Rotate through 25 stocks across multiple runs.
     state = read_json('.yoyo_cursor.json', {'cursor': 0})
-
     cursor = int(state.get('cursor', 0)) % len(SYMBOLS)
 
     subset = [
@@ -483,7 +495,6 @@ def main():
         if i < len(subset) - 1:
             time.sleep(DELAY)
 
-    # Keep previously fetched symbols in the cache.
     CACHE.write_text(json.dumps(existing, indent=2) + '\n')
 
     if 'SPY' in existing:
@@ -494,8 +505,7 @@ def main():
     Path('.yoyo_cursor.json').write_text(
         json.dumps({
             'cursor': (cursor + BATCH) % len(SYMBOLS)
-        }, indent=2
-        ) + '\n'
+        }, indent=2) + '\n'
     )
 
     print(
