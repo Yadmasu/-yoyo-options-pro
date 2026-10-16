@@ -1,215 +1,112 @@
-import os
-import json
-import urllib.parse
-import urllib.request
-from datetime import datetime, timezone
+"""YOYO Options Pro: incremental daily research feed. No trading execution."""
+import json, os, time, urllib.parse, urllib.request
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
 
-API_KEY = os.environ.get("ALPHA_VANTAGE_API_KEY", "").strip()
+SYMBOLS = 'SPY QQQ IWM DIA NVDA AAPL MSFT AMD GOOGL TSLA AMZN META PLTR NFLX AVGO MU INTC TSM JPM BAC GS COIN MSTR HOOD SOFI'.split()
+AV = os.getenv('ALPHA_VANTAGE_API_KEY','').strip()
+TRADIER = os.getenv('TRADIER_TOKEN','').strip()
+TRADIER_BASE = os.getenv('TRADIER_BASE_URL','https://api.tradier.com').rstrip('/')
+BATCH = max(1,min(25,int(os.getenv('SYMBOLS_PER_RUN','5'))))
+DELAY = max(0,float(os.getenv('REQUEST_DELAY_SECONDS','15')))
+CACHE = Path('stock_signals.json')
 
-if not API_KEY:
-    raise SystemExit("Missing ALPHA_VANTAGE_API_KEY")
+def read_json(path, default):
+    try: return json.loads(Path(path).read_text())
+    except (OSError, ValueError): return default
 
-SYMBOL = "SPY"
+def fetch(url, headers=None):
+    req = urllib.request.Request(url,headers=headers or {'User-Agent':'YOYO-Options-Pro/1.0'})
+    with urllib.request.urlopen(req,timeout=25) as r: return json.load(r)
 
-params = urllib.parse.urlencode({
-    "function": "TIME_SERIES_DAILY",
-    "symbol": SYMBOL,
-    "outputsize": "compact",
-    "apikey": API_KEY
-})
+def stock(symbol):
+    query = urllib.parse.urlencode(dict(function='TIME_SERIES_DAILY',symbol=symbol,outputsize='compact',apikey=AV))
+    raw=fetch('https://www.alphavantage.co/query?'+query)
+    series=raw.get('Time Series (Daily)')
+    if not isinstance(series,dict): raise ValueError('Alpha Vantage unavailable or rate-limited: '+str(list(raw)))
+    dates=sorted(series)
+    if len(dates)<22: raise ValueError('Need 22 completed candles')
+    candles=[series[d] for d in dates]
+    close=[float(c['4. close']) for c in candles]
+    high=[float(c['2. high']) for c in candles]
+    low=[float(c['3. low']) for c in candles]
+    vol=[float(c['5. volume']) for c in candles]
+    def bb(a,n):
+        mean=sum(a)/len(a)
+        std=(sum((x-mean)**2 for x in a)/len(a))**.5
+        return {'upper':round(mean+n*std,4),'middle':round(mean,4),'lower':round(mean-n*std,4)}
+    current2=bb(close[-20:],2); current3=bb(close[-20:],3)
+    prev2=bb(close[-21:-1],2)
+    vr=vol[-1]/(sum(vol[-21:-1])/20) if sum(vol[-21:-1]) else 0
+    direction='WAIT'; reason='No confirmed experimental setup'
+    if close[-2]<prev2['lower'] and close[-1]>current2['lower'] and close[-1]>close[-2] and vr>=1.2:
+        direction='CALL';reason='Experimental lower-band reversal and volume confirmation'
+    elif close[-2]>prev2['upper'] and close[-1]<current2['upper'] and close[-1]<close[-2] and vr>=1.2:
+        direction='PUT';reason='Experimental upper-band rejection and volume confirmation'
+    return dict(symbol=symbol,timeframe='1D',date=dates[-1],updated_at_utc=datetime.now(timezone.utc).isoformat(),close=round(close[-1],4),volume_ratio=round(vr,2),support=round(min(low[-20:]),4),resistance=round(max(high[-20:]),4),bb20_2=current2,bb20_3=current3,signal=direction,reason=reason,status='EXPERIMENTAL',note='Research only; not an options trade recommendation.')
 
-url = "https://www.alphavantage.co/query?" + params
+def options(symbol):
+    """Fetch actual Tradier option chains for three DTE windows; never synthesize quotes."""
+    if not TRADIER:
+        return {'status':'UNAVAILABLE','reason':'TRADIER_TOKEN not configured'}
+    headers={'Authorization':'Bearer '+TRADIER,'Accept':'application/json'}
+    base=TRADIER_BASE+'/v1/markets/options/'
+    raw=fetch(base+'expirations?'+urllib.parse.urlencode({'symbol':symbol}),headers)
+    exp=raw.get('expirations') or {}
+    dates=exp.get('date',[]) if isinstance(exp,dict) else []
+    if isinstance(dates,str): dates=[dates]
+    today=datetime.now(timezone.utc).date()
+    windows={'14-21':(14,21),'30-45':(30,45),'60-90':(60,90)}
+    by_dte={}
+    for label,(start,end) in windows.items():
+        candidates=[]
+        for value in dates:
+            try:
+                days=(datetime.strptime(value,'%Y-%m-%d').date()-today).days
+                if start<=days<=end: candidates.append((days,value))
+            except (TypeError,ValueError): pass
+        if not candidates:
+            by_dte[label]={'status':'UNAVAILABLE','reason':'No listed expiration in selected DTE window'}
+            continue
+        _,expiration=min(candidates)
+        try:
+            raw=fetch(base+'chains?'+urllib.parse.urlencode({'symbol':symbol,'expiration':expiration,'greeks':'false'}),headers)
+            chain=(raw.get('options') or {}).get('option',[])
+            if isinstance(chain,dict): chain=[chain]
+            items=[{'type':x.get('option_type'),'strike':x.get('strike'),'expiration':expiration,
+                    'bid':x.get('bid'),'ask':x.get('ask'),'volume':x.get('volume'),
+                    'open_interest':x.get('open_interest'),'symbol':x.get('symbol')}
+                   for x in chain if isinstance(x,dict)]
+            by_dte[label]={'status':'AVAILABLE' if items else 'UNAVAILABLE',
+                           'expiration':expiration,'contracts':items,'source':'Tradier',
+                           'updated_at_utc':datetime.now(timezone.utc).isoformat()}
+        except Exception as exc:
+            by_dte[label]={'status':'UNAVAILABLE','reason':str(exc)[:160]}
+    return {'status':'AVAILABLE','by_dte':by_dte,'source':'Tradier'}
 
-request = urllib.request.Request(
-    url,
-    headers={"User-Agent": "YOYO-OPTIONS-PRO/1.0"}
-)
+def main():
+    if not AV: raise SystemExit('ALPHA_VANTAGE_API_KEY is missing')
+    existing=read_json(CACHE,{})
+    if not isinstance(existing,dict): existing={}
+    # Rotate so 25 symbols are covered over multiple runs. Limit according to API plan.
+    state=read_json('.yoyo_cursor.json',{'cursor':0})
+    cursor=int(state.get('cursor',0))%len(SYMBOLS)
+    subset=[SYMBOLS[(cursor+i)%len(SYMBOLS)] for i in range(BATCH)]
+    updated=0
+    for i,symbol in enumerate(subset):
+        try:
+            record=stock(symbol)
+            try: record['options']=options(symbol)
+            except Exception as exc: record['options']={'status':'UNAVAILABLE','reason':str(exc)[:160]}
+            existing[symbol]=record;updated+=1
+            print(symbol,record['date'],record['signal'])
+        except Exception as exc: print('ERROR',symbol,str(exc)[:160])
+        if i<len(subset)-1: time.sleep(DELAY)
+    # Never publish a record for a symbol that has never been fetched.
+    CACHE.write_text(json.dumps(existing,indent=2)+'\n')
+    if 'SPY' in existing: Path('stock_signal.json').write_text(json.dumps(existing['SPY'],indent=2)+'\n')
+    Path('.yoyo_cursor.json').write_text(json.dumps({'cursor':(cursor+BATCH)%len(SYMBOLS)},indent=2)+'\n')
+    print('Updated',updated,'of',len(subset),'attempted; cached symbols:',len(existing))
+    if updated==0: raise SystemExit('No market data fetched; existing cache retained')
 
-with urllib.request.urlopen(request, timeout=30) as response:
-    data = json.load(response)
-
-series = data.get("Time Series (Daily)")
-
-if not series:
-    raise SystemExit(
-        "Stock data unavailable: " + str(list(data.keys()))
-    )
-
-dates = sorted(series.keys())
-
-if len(dates) < 22:
-    raise SystemExit("Not enough daily candles")
-
-candles = []
-
-for date in dates:
-    row = series[date]
-
-    candles.append({
-        "date": date,
-        "open": float(row["1. open"]),
-        "high": float(row["2. high"]),
-        "low": float(row["3. low"]),
-        "close": float(row["4. close"]),
-        "volume": float(row["5. volume"])
-    })
-
-
-def bollinger(values, deviation=2):
-    recent = values[-20:]
-    mean = sum(recent) / len(recent)
-
-    variance = sum(
-        (value - mean) ** 2 for value in recent
-    ) / len(recent)
-
-    std = variance ** 0.5
-
-    return {
-        "middle": mean,
-        "upper": mean + deviation * std,
-        "lower": mean - deviation * std
-    }
-
-
-closes = [c["close"] for c in candles]
-
-bb2 = bollinger(closes, 2)
-bb3 = bollinger(closes, 3)
-
-# Previous completed day's Bollinger Bands
-previous_bb2 = bollinger(closes[:-1], 2)
-
-today = candles[-1]
-yesterday = candles[-2]
-
-close = today["close"]
-open_price = today["open"]
-
-# Volume confirmation: today's volume vs previous 20 days
-previous_volumes = [
-    candle["volume"] for candle in candles[-21:-1]
-]
-
-average_volume = sum(previous_volumes) / len(previous_volumes)
-
-volume_ratio = (
-    today["volume"] / average_volume
-    if average_volume > 0 else 0
-)
-
-volume_confirmed = volume_ratio >= 1.2
-
-# Candle confirmation
-bullish_candle = close > open_price
-bearish_candle = close < open_price
-
-# Simple support/resistance from preceding 20 sessions
-history = candles[-21:-1]
-
-support = min(c["low"] for c in history)
-resistance = max(c["high"] for c in history)
-
-# Reversal detection using each day's own BB
-lower_reversal = (
-    yesterday["close"] <= previous_bb2["lower"]
-    and close > bb2["lower"]
-)
-
-upper_reversal = (
-    yesterday["close"] >= previous_bb2["upper"]
-    and close < bb2["upper"]
-)
-
-# Price proximity to support/resistance (within 1%)
-support_confirmed = (
-    today["low"] <= support * 1.01
-    and close > support
-)
-
-resistance_confirmed = (
-    today["high"] >= resistance * 0.99
-    and close < resistance
-)
-
-signal = "WAIT"
-reason = "No confirmed setup"
-
-if (
-    lower_reversal
-    and bullish_candle
-    and volume_confirmed
-    and support_confirmed
-):
-    signal = "CALL"
-    reason = (
-        "Lower BB reversal + bullish candle "
-        "+ volume + support confirmation"
-    )
-
-elif (
-    upper_reversal
-    and bearish_candle
-    and volume_confirmed
-    and resistance_confirmed
-):
-    signal = "PUT"
-    reason = (
-        "Upper BB rejection + bearish candle "
-        "+ volume + resistance confirmation"
-    )
-
-result = {
-    "symbol": SYMBOL,
-    "timeframe": "1D",
-    "date": today["date"],
-    "updated_at_utc": datetime.now(
-        timezone.utc
-    ).isoformat(),
-
-    "open": round(today["open"], 4),
-    "high": round(today["high"], 4),
-    "low": round(today["low"], 4),
-    "close": round(close, 4),
-
-    "bb20_2": {
-        k: round(v, 4) for k, v in bb2.items()
-    },
-
-    "bb20_3": {
-        k: round(v, 4) for k, v in bb3.items()
-    },
-
-    "support": round(support, 4),
-    "resistance": round(resistance, 4),
-
-    "volume_ratio": round(volume_ratio, 2),
-    "volume_confirmed": volume_confirmed,
-
-    "bullish_candle": bullish_candle,
-    "bearish_candle": bearish_candle,
-
-    "signal": signal,
-    "reason": reason,
-
-    "status": "EXPERIMENTAL",
-    "note": (
-        "Daily stock-price signal only. "
-        "Not a verified options contract. "
-        "No strike, expiration or premium."
-    )
-}
-
-with open("stock_signal.json", "w") as file:
-    json.dump(result, file, indent=2)
-
-print("YOYO OPTIONS PRO")
-print("Stock:", SYMBOL)
-print("Date:", today["date"])
-print("Close:", round(close, 2))
-print("Volume:", round(volume_ratio, 2), "x")
-print("Support:", round(support, 2))
-print("Resistance:", round(resistance, 2))
-print("Signal:", signal)
-print("Reason:", reason)
-print("Saved stock_signal.json")
+if __name__=='__main__': main()
