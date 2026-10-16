@@ -138,5 +138,145 @@
       "status": "UNAVAILABLE",
       "reason": "TRADIER_TOKEN not configured"
     }
+  },
+  "AAPL": {
+    "symbol": "AAPL",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:22:25.463536+00:00",
+    "close": 342.0,
+    "volume_ratio": 1.04,
+    "support": 325.81,
+    "resistance": 348.1499,
+    "bb20_2": {
+      "upper": 344.7483,
+      "middle": 337.0575,
+      "lower": 329.3667
+    },
+    "bb20_3": {
+      "upper": 348.5937,
+      "middle": 337.0575,
+      "lower": 325.5213
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "MSFT": {
+    "symbol": "MSFT",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:22:40.686252+00:00",
+    "close": 539.44,
+    "volume_ratio": 1.06,
+    "support": 491.1,
+    "resistance": 551.15,
+    "bb20_2": {
+      "upper": 549.0905,
+      "middle": 518.457,
+      "lower": 487.8235
+    },
+    "bb20_3": {
+      "upper": 564.4073,
+      "middle": 518.457,
+      "lower": 472.5067
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "AMD": {
+    "symbol": "AMD",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:22:55.850319+00:00",
+    "close": 562.23,
+    "volume_ratio": 1.33,
+    "support": 530.09,
+    "resistance": 658.52,
+    "bb20_2": {
+      "upper": 660.1487,
+      "middle": 611.954,
+      "lower": 563.7593
+    },
+    "bb20_3": {
+      "upper": 684.246,
+      "middle": 611.954,
+      "lower": 539.662
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "GOOGL": {
+    "symbol": "GOOGL",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:23:11.091408+00:00",
+    "close": 349.22,
+    "volume_ratio": 0.82,
+    "support": 335.5108,
+    "resistance": 364.17,
+    "bb20_2": {
+      "upper": 356.6077,
+      "middle": 346.8615,
+      "lower": 337.1153
+    },
+    "bb20_3": {
+      "upper": 361.4808,
+      "middle": 346.8615,
+      "lower": 332.2422
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "TSLA": {
+    "symbol": "TSLA",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:23:26.300679+00:00",
+    "close": 362.44,
+    "volume_ratio": 0.77,
+    "support": 345.88,
+    "resistance": 388.56,
+    "bb20_2": {
+      "upper": 389.9267,
+      "middle": 370.811,
+      "lower": 351.6953
+    },
+    "bb20_3": {
+      "upper": 399.4845,
+      "middle": 370.811,
+      "lower": 342.1375
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
   }
 }
