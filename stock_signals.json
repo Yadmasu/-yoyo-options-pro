@@ -278,5 +278,145 @@
       "status": "UNAVAILABLE",
       "reason": "TRADIER_TOKEN not configured"
     }
+  },
+  "AMZN": {
+    "symbol": "AMZN",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:29:45.503523+00:00",
+    "close": 254.76,
+    "volume_ratio": 0.96,
+    "support": 244.725,
+    "resistance": 263.7,
+    "bb20_2": {
+      "upper": 262.6307,
+      "middle": 253.4115,
+      "lower": 244.1923
+    },
+    "bb20_3": {
+      "upper": 267.2402,
+      "middle": 253.4115,
+      "lower": 239.5828
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "META": {
+    "symbol": "META",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:30:00.752691+00:00",
+    "close": 736.72,
+    "volume_ratio": 0.77,
+    "support": 660.8,
+    "resistance": 779.8192,
+    "bb20_2": {
+      "upper": 776.335,
+      "middle": 733.5955,
+      "lower": 690.856
+    },
+    "bb20_3": {
+      "upper": 797.7047,
+      "middle": 733.5955,
+      "lower": 669.4863
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "PLTR": {
+    "symbol": "PLTR",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:30:15.930870+00:00",
+    "close": 200.5,
+    "volume_ratio": 1.06,
+    "support": 172.0,
+    "resistance": 212.9399,
+    "bb20_2": {
+      "upper": 210.2608,
+      "middle": 193.131,
+      "lower": 176.0012
+    },
+    "bb20_3": {
+      "upper": 218.8256,
+      "middle": 193.131,
+      "lower": 167.4364
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "NFLX": {
+    "symbol": "NFLX",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:30:31.089600+00:00",
+    "close": 72.61,
+    "volume_ratio": 1.06,
+    "support": 66.54,
+    "resistance": 73.87,
+    "bb20_2": {
+      "upper": 73.6911,
+      "middle": 70.3783,
+      "lower": 67.0654
+    },
+    "bb20_3": {
+      "upper": 75.3475,
+      "middle": 70.3783,
+      "lower": 65.409
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
+  },
+  "AVGO": {
+    "symbol": "AVGO",
+    "timeframe": "1D",
+    "date": "2026-10-15",
+    "updated_at_utc": "2026-10-16T16:30:46.238888+00:00",
+    "close": 344.33,
+    "volume_ratio": 1.25,
+    "support": 334.61,
+    "resistance": 380.84,
+    "bb20_2": {
+      "upper": 374.1896,
+      "middle": 356.837,
+      "lower": 339.4844
+    },
+    "bb20_3": {
+      "upper": 382.8659,
+      "middle": 356.837,
+      "lower": 330.8081
+    },
+    "signal": "WAIT",
+    "reason": "No confirmed experimental setup",
+    "status": "EXPERIMENTAL",
+    "note": "Research only; not an options trade recommendation.",
+    "options": {
+      "status": "UNAVAILABLE",
+      "reason": "TRADIER_TOKEN not configured"
+    }
   }
 }
