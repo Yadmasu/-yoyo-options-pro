@@ -506,7 +506,41 @@ $("analyze").addEventListener("click",() => {
 });
 
 loadTradingView("SPY");
-showUnverifiedSignal();
+async function loadStockSignal() {
+  try {
+    const response = await fetch("./stock_signal.json?t=" + Date.now());
+
+    if (!response.ok) {
+      throw new Error("Signal file not available");
+    }
+
+    const data = await response.json();
+
+    if (data.symbol && data.symbol !== currentSymbol) {
+      showUnverifiedSignal();
+      return;
+    }
+
+    const signal = String(data.signal || "WAIT").toUpperCase();
+
+    if (!["CALL", "PUT", "WAIT"].includes(signal)) {
+      throw new Error("Invalid signal");
+    }
+
+    $("signal").innerHTML = `
+      <span class="signal ${signal === "WAIT" ? "wait" : ""}">
+        ${signal}
+      </span>
+      <p>Stock: ${currentSymbol}</p>
+      <p>Signal date: ${data.date || "Unknown"}</p>
+      <p>Reason: ${data.reason || "Not provided"}</p>
+    `;
+  } catch (error) {
+    showUnverifiedSignal();
+  }
+}
+
+loadStockSignal();
 </script>
 
 </body>
