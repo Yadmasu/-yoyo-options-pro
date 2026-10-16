@@ -2,36 +2,39 @@ name: YOYO Stock Signal
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "30 22 * * 1-5"
 
 permissions:
   contents: write
 
+concurrency:
+  group: yoyo-stock-signal
+  cancel-in-progress: false
+
 jobs:
   stock-signal:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run stock signal
+      - name: Generate 25-stock data
         env:
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          TRADIER_TOKEN: ${{ secrets.TRADIER_TOKEN }}
+          SYMBOLS_PER_RUN: "5"
+          REQUEST_DELAY_SECONDS: "15"
         run: python3 stock_signal.py
 
-      - name: Upload signal result
-        uses: actions/upload-artifact@v4
-        with:
-          name: yoyo-stock-signal
-          path: stock_signal.json
-          if-no-files-found: error
-
-      - name: Publish signal to website
+      - name: Save updated signals
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add stock_signal.json
+          git add stock_signals.json stock_signal.json .yoyo_cursor.json
           if ! git diff --cached --quiet; then
-            git commit -m "Update stock signal"
+            git commit -m "Update YOYO stock signals"
             git push
           fi
