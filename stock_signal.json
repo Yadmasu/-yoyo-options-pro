@@ -1,0 +1,21 @@
+{
+  "symbol": "SPY",
+  "timeframe": "1D",
+  "date": "2026-10-15",
+  "updated_at_utc": "2026-10-16T04:43:33.180950+00:00",
+  "close": 771.79,
+  "bb20_2": {
+    "middle": 771.106,
+    "upper": 782.1189,
+    "lower": 760.0931
+  },
+  "bb20_3": {
+    "middle": 771.106,
+    "upper": 787.6254,
+    "lower": 754.5866
+  },
+  "signal": "WAIT",
+  "reason": "No confirmed setup",
+  "status": "EXPERIMENTAL",
+  "note": "Stock-price analysis only. No verified option contract or premium."
+}
