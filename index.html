@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080d18">
 <title>Ⓞ YOYO OPTIONS PRO</title>
 
 <style>
-:root{
+:root {
   --bg:#080d18;
   --panel:#111f33;
   --card:#182b43;
@@ -20,48 +20,49 @@
   --blue:#77baff;
   --purple:#b59bff;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
+* {box-sizing:border-box}
+body {
   margin:0;
-  background:radial-gradient(circle at top left,#17415a,transparent 45%),var(--bg);
+  background:
+    radial-gradient(circle at top left,#17415a,transparent 45%),
+    var(--bg);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
 }
-header{
+header {
   position:sticky;
   top:0;
   z-index:100;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:10px;
-  padding:17px 15px;
+  gap:8px;
+  padding:17px 14px;
   background:#080d18f5;
   border-bottom:1px solid var(--border);
 }
-.logo{font-size:20px;font-weight:900}
-.logo span{color:var(--green)}
-.badge{
+.logo {font-size:18px;font-weight:900}
+.logo span {color:var(--green)}
+.badge {
   padding:8px;
   border:1px solid #806735;
   border-radius:25px;
   color:var(--gold);
-  font-size:11px;
+  font-size:10px;
   font-weight:bold;
 }
-main{max-width:1100px;margin:auto;padding:15px}
-.panel{
+main {max-width:1100px;margin:auto;padding:15px}
+.panel {
   margin-bottom:16px;
-  padding:20px;
+  padding:19px;
   border:1px solid var(--border);
   border-radius:18px;
   background:linear-gradient(145deg,#152740,#0e1b2d);
 }
-h1{font-size:27px;margin:0 0 12px}
-h2{font-size:21px;margin:0 0 15px}
-p{color:var(--muted);line-height:1.6}
-.info{
+h1 {font-size:27px;margin:0 0 12px}
+h2 {font-size:21px;margin:0 0 15px}
+p {color:var(--muted);line-height:1.6}
+.info {
   padding:15px;
   background:#162e47;
   border-left:4px solid var(--blue);
@@ -69,69 +70,83 @@ p{color:var(--muted);line-height:1.6}
   line-height:1.7;
   color:#d4e2f2;
 }
-.grid{
+.grid {
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:12px;
 }
-label{
+label {
   display:block;
   margin:13px 0 8px;
   color:var(--muted);
   font-size:13px;
   font-weight:bold;
 }
-select{
+select {
   width:100%;
-  padding:14px;
+  padding:14px 8px;
   background:#081525;
   color:white;
   border:1px solid #405a76;
   border-radius:10px;
   font-size:15px;
 }
-button{
+button,.linkbtn {
+  display:inline-block;
   border:0;
   border-radius:11px;
-  padding:16px;
-  font-size:16px;
+  padding:15px;
+  font-size:15px;
   font-weight:900;
+  text-decoration:none;
   cursor:pointer;
+  text-align:center;
 }
-.primary{
+.primary {
   width:100%;
-  margin-top:20px;
+  margin-top:18px;
   color:#062a22;
   background:linear-gradient(110deg,#20d5a6,#83edd2);
 }
-.metric{
+.secondary {
+  background:#203d59;
+  color:#d9edff;
+  border:1px solid #42627e;
+}
+.metric {
   padding:15px;
   border:1px solid var(--border);
   border-radius:12px;
   background:var(--card);
 }
-.metric small{
+.metric small {
   display:block;
   margin-bottom:8px;
   color:var(--muted);
 }
-.metric strong{
-  font-size:19px;
+.metric strong {
+  font-size:18px;
   overflow-wrap:anywhere;
 }
-.green{color:var(--green)}
-.red{color:var(--red)}
-.gold{color:var(--gold)}
-.blue{color:var(--blue)}
-.chartbox{
-  height:530px;
+.green {color:var(--green)}
+.red {color:var(--red)}
+.gold {color:var(--gold)}
+.blue {color:var(--blue)}
+.chartbox {
+  position:relative;
+  height:480px;
   background:#091522;
   border:1px solid var(--border);
   border-radius:14px;
   overflow:hidden;
 }
-#tradingview_chart{width:100%;height:100%}
-.legend{
+#tradingview_chart {width:100%;height:100%}
+#chartFallback {
+  display:none;
+  padding:22px;
+  text-align:center;
+}
+.legend {
   display:flex;
   flex-wrap:wrap;
   gap:13px;
@@ -139,20 +154,20 @@ button{
   font-size:12px;
   color:var(--muted);
 }
-.dot{
+.dot {
   display:inline-block;
   width:9px;
   height:9px;
   margin-right:5px;
   border-radius:50%;
 }
-.result{
+.result {
   padding:18px;
   background:#101e30;
   border:1px solid var(--border);
   border-radius:12px;
 }
-.signal{
+.signal {
   display:inline-block;
   margin-bottom:12px;
   padding:12px 20px;
@@ -160,52 +175,78 @@ button{
   font-size:22px;
   font-weight:900;
 }
-.call{background:#174d40;color:var(--green)}
-.put{background:#502637;color:var(--red)}
-.wait{background:#504022;color:var(--gold)}
-.expiry{
+.call {background:#174d40;color:var(--green)}
+.put {background:#502637;color:var(--red)}
+.wait {background:#504022;color:var(--gold)}
+.expiry {
   display:inline-block;
   margin:5px;
-  padding:9px;
+  padding:10px;
   color:#d6e6f7;
   background:#21384d;
   border:1px solid #405970;
   border-radius:8px;
   font-size:12px;
 }
-.status{
-  margin-top:15px;
+.status {
+  margin-top:14px;
   color:var(--muted);
   font-size:13px;
   overflow-wrap:anywhere;
 }
-.warning{
-  padding:12px;
+.warning {
+  padding:13px;
   border:1px solid #806735;
   border-radius:10px;
   color:var(--gold);
   background:#332b1b;
   line-height:1.6;
 }
-.datebox{
+.datebox {
   padding:15px;
   margin-top:14px;
   border:1px solid var(--border);
   border-radius:12px;
   background:#101e30;
 }
-.datebox p{margin:7px 0}
-footer{
+.datebox p {margin:7px 0}
+.row {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid #263c54;
+}
+.row:last-child {border-bottom:0}
+.row .label {color:var(--muted)}
+.row .value {
+  color:var(--text);
+  text-align:right;
+  overflow-wrap:anywhere;
+  max-width:55%;
+}
+.pill {
+  display:inline-block;
+  padding:7px 11px;
+  border-radius:20px;
+  background:#203d59;
+  color:var(--blue);
+  font-size:12px;
+  font-weight:bold;
+}
+footer {
   padding:25px;
   text-align:center;
   color:var(--muted);
   font-size:12px;
 }
-@media(max-width:450px){
-  .logo{font-size:16px}
-  .panel{padding:15px}
-  .metric strong{font-size:16px}
-  .chartbox{height:460px}
+@media(max-width:450px) {
+  .logo {font-size:15px}
+  .panel {padding:15px}
+  .metric strong {font-size:16px}
+  .chartbox {height:420px}
+  .row {font-size:13px}
 }
 </style>
 </head>
@@ -222,16 +263,16 @@ footer{
 <section class="panel">
   <h1>Stock Options Intelligence</h1>
   <p>
-    TradingView Daily Chart Analysis<br>
+    Daily Stock Analysis<br>
     Bollinger Bands (20,2) + (20,3)<br>
-    CALL / PUT / WAIT
+    CALL / PUT / WAIT Research
   </p>
 
   <div class="info">
     <strong class="green">RULE-BASED ANALYSIS</strong><br>
     1D Candlestick Chart<br>
-    Support / Resistance Analysis<br>
-    New York Time<br>
+    Support / Resistance<br>
+    New York Market Time<br>
     30–45 DTE Default<br>
     No Automatic Trading
   </div>
@@ -239,23 +280,22 @@ footer{
   <div class="datebox">
     <p>
       <strong>Today (New York):</strong>
-      <span id="todayNY">Checking...</span>
+      <span id="todayNY">—</span>
     </p>
     <p>
-      <strong>Current New York Time:</strong>
-      <span id="clockNY">Checking...</span>
+      <strong>New York Time:</strong>
+      <span id="clockNY">—</span>
     </p>
-    <p class="gold">
-      Market data date may differ from today's date.
-      Only completed daily candles should be used
-      for daily-close analysis.
+    <p>
+      <strong>US Stock Market:</strong>
+      <span id="marketStatus" class="gold">Checking</span>
     </p>
   </div>
 
   <p class="warning">
-    Experimental research tool.
-    CALL or PUT is not a verified options contract
-    or a guarantee of profitable trading.
+    Educational research only.
+    This application does not provide verified
+    options contracts or guaranteed trading signals.
   </p>
 </section>
 
@@ -265,16 +305,40 @@ footer{
   <div class="grid">
     <div>
       <label>Stock / ETF</label>
-      <select id="symbol"></select>
+      <select id="symbol">
+        <option value="SPY">SPY</option>
+        <option value="QQQ">QQQ</option>
+        <option value="IWM">IWM</option>
+        <option value="DIA">DIA</option>
+        <option value="NVDA">NVDA</option>
+        <option value="AAPL">AAPL</option>
+        <option value="MSFT">MSFT</option>
+        <option value="AMD">AMD</option>
+        <option value="GOOGL">GOOGL</option>
+        <option value="TSLA">TSLA</option>
+        <option value="AMZN">AMZN</option>
+        <option value="META">META</option>
+        <option value="PLTR">PLTR</option>
+        <option value="NFLX">NFLX</option>
+        <option value="AVGO">AVGO</option>
+        <option value="MU">MU</option>
+        <option value="INTC">INTC</option>
+        <option value="TSM">TSM</option>
+        <option value="JPM">JPM</option>
+        <option value="BAC">BAC</option>
+        <option value="GS">GS</option>
+        <option value="COIN">COIN</option>
+        <option value="MSTR">MSTR</option>
+        <option value="HOOD">HOOD</option>
+        <option value="SOFI">SOFI</option>
+      </select>
     </div>
 
     <div>
       <label>Expiration Preference</label>
       <select id="dte">
         <option value="14-21">14–21 Days</option>
-        <option value="30-45" selected>
-          30–45 Days
-        </option>
+        <option value="30-45" selected>30–45 Days</option>
         <option value="60-90">60–90 Days</option>
       </select>
     </div>
@@ -299,17 +363,19 @@ footer{
   </button>
 
   <div class="status" id="status">
-    Select a stock to view its TradingView chart.
+    Ready to analyze.
   </div>
 </section>
 
 <section class="panel">
   <h2>Expiration Calendar</h2>
   <p>
-    Calendar candidates based on selected DTE.
-    Actual listed expirations require options-chain data.
+    Friday calendar candidates within the selected DTE.
+    These are not verified listed option expirations.
   </p>
-  <div id="expirationResults"></div>
+  <div id="expirationResults">
+    Calculating dates...
+  </div>
 </section>
 
 <section class="panel">
@@ -318,6 +384,24 @@ footer{
   <div class="chartbox">
     <div id="tradingview_chart"></div>
   </div>
+
+  <div id="chartFallback">
+    <p class="warning">
+      The embedded chart is unavailable.
+      Open the selected stock directly in TradingView.
+    </p>
+  </div>
+
+  <p>
+    <a
+      id="openChart"
+      class="linkbtn secondary"
+      href="https://www.tradingview.com/chart/?symbol=AMEX%3ASPY"
+      target="_blank"
+      rel="noopener noreferrer">
+      OPEN FULL CHART ↗
+    </a>
+  </p>
 
   <div class="legend">
     <span>
@@ -335,22 +419,23 @@ footer{
   </div>
 
   <p>
-    Legend shows intended strategy settings,
-    not confirmed chart settings.
-    The embedded chart may show two default
-    BB (20,2) indicators.
-    Verify and adjust the second to BB (20,3)
-    manually.
+    Indicator legend describes the intended strategy.
+    Embedded TradingView settings are not guaranteed.
+    Check BB (20,2) and BB (20,3) manually.
   </p>
 </section>
 
-<section class="panel">
+<section class="panel" id="signalsPanel">
   <h2>Trading Signals</h2>
 
   <div id="signal" class="result" aria-live="polite">
     <span class="signal wait">WAIT</span>
-    <p>Checking available daily stock analysis...</p>
+    <p>Preparing stock analysis...</p>
   </div>
+
+  <button class="primary" id="refreshSignal">
+    REFRESH STOCK DATA
+  </button>
 </section>
 
 <section class="panel">
@@ -378,10 +463,10 @@ footer{
       </div>
     </div>
 
-    <p>
-      No verified options chain is connected.
-      Contract prices and strikes are
-      intentionally not estimated.
+    <p class="warning">
+      Verified options-chain data is not connected.
+      No contract, premium, entry or stop-loss
+      values are invented.
     </p>
   </div>
 </section>
@@ -390,7 +475,7 @@ footer{
   <h2>Strategy Rules</h2>
 
   <div class="info">
-    <b class="green">CALL</b><br>
+    <strong class="green">CALL — Research Condition</strong><br>
     Lower Bollinger Band reversal<br>
     Completed bullish daily candle<br>
     Support confirmation
@@ -399,7 +484,7 @@ footer{
   <br>
 
   <div class="info">
-    <b class="red">PUT</b><br>
+    <strong class="red">PUT — Research Condition</strong><br>
     Upper Bollinger Band rejection<br>
     Completed bearish daily candle<br>
     Resistance confirmation
@@ -408,17 +493,15 @@ footer{
   <br>
 
   <div class="info">
-    <b class="gold">WAIT</b><br>
-    No confirmed setup, unsupported symbol,
-    stale data, incomplete daily candle,
-    or market data unavailable.
+    <strong class="gold">WAIT</strong><br>
+    No confirmed setup, unsupported stock,
+    outdated data or unavailable market information.
   </div>
 
   <p>
-    These are intended strategy descriptions.
-    Actual conditions depend on the Python
-    signal generator and require independent
-    validation.
+    Actual calculations are produced by the
+    Python signal generator, not the TradingView
+    chart widget.
   </p>
 </section>
 
@@ -426,583 +509,663 @@ footer{
 
 <footer>
   Ⓞ YOYO OPTIONS PRO © 2026<br>
-  Educational Research Only
+  Educational Research Only<br>
+  Version 2.0
 </footer>
 
-<script src="https://s3.tradingview.com/tv.js"></script>
-
 <script>
-"use strict";
+(function () {
+  "use strict";
 
-const $ = id => document.getElementById(id);
+  function el(id) {
+    return document.getElementById(id);
+  }
 
-const SYMBOLS = [
-  "SPY","QQQ","IWM","DIA",
-  "NVDA","AAPL","MSFT","AMD","GOOGL",
-  "TSLA","AMZN","META","PLTR","NFLX",
-  "AVGO","MU","INTC","TSM",
-  "JPM","BAC","GS",
-  "COIN","MSTR","HOOD","SOFI"
-];
+  function safe(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#39;");
+  }
 
-const EXCHANGES = {
-  SPY:"AMEX",
-  QQQ:"NASDAQ",
-  IWM:"AMEX",
-  DIA:"AMEX",
-  NVDA:"NASDAQ",
-  AAPL:"NASDAQ",
-  MSFT:"NASDAQ",
-  AMD:"NASDAQ",
-  GOOGL:"NASDAQ",
-  TSLA:"NASDAQ",
-  AMZN:"NASDAQ",
-  META:"NASDAQ",
-  PLTR:"NASDAQ",
-  NFLX:"NASDAQ",
-  AVGO:"NASDAQ",
-  MU:"NASDAQ",
-  INTC:"NASDAQ",
-  TSM:"NYSE",
-  JPM:"NYSE",
-  BAC:"NYSE",
-  GS:"NYSE",
-  COIN:"NASDAQ",
-  MSTR:"NASDAQ",
-  HOOD:"NASDAQ",
-  SOFI:"NASDAQ"
-};
+  function number(value, prefix, suffix) {
+    var n = Number(value);
 
-SYMBOLS.forEach(symbol => {
-  $("symbol").add(new Option(symbol,symbol));
-});
+    if (
+      value === null ||
+      value === undefined ||
+      value === "" ||
+      !isFinite(n)
+    ) {
+      return "Unavailable";
+    }
 
-function nyParts(date = new Date()) {
-  return Object.fromEntries(
-    new Intl.DateTimeFormat("en-US",{
+    return (prefix || "") +
+      n.toFixed(2) +
+      (suffix || "");
+  }
+
+  function nyValues() {
+    var date = new Date();
+
+    var parts = new Intl.DateTimeFormat("en-US",{
       timeZone:"America/New_York",
       year:"numeric",
       month:"2-digit",
-      day:"2-digit"
-    })
-    .formatToParts(date)
-    .filter(x => x.type !== "literal")
-    .map(x => [x.type,x.value])
-  );
-}
+      day:"2-digit",
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit",
+      hour12:false,
+      weekday:"short"
+    }).formatToParts(date);
 
-function nyDateISO(date = new Date()) {
-  const p = nyParts(date);
-  return `${p.year}-${p.month}-${p.day}`;
-}
+    var obj = {};
 
-function nyTime() {
-  return new Intl.DateTimeFormat("en-US",{
-    timeZone:"America/New_York",
-    dateStyle:"medium",
-    timeStyle:"short",
-    timeZoneName:"short"
-  }).format(new Date());
-}
-
-function updateClock() {
-  $("todayNY").textContent = nyDateISO();
-  $("clockNY").textContent = nyTime();
-}
-
-updateClock();
-setInterval(updateClock,60000);
-
-function expirationCalendar() {
-  const [min,max] = $("dte").value
-    .split("-")
-    .map(Number);
-
-  const parts = nyParts();
-
-  const today = Date.UTC(
-    Number(parts.year),
-    Number(parts.month)-1,
-    Number(parts.day)
-  );
-
-  let html = "";
-
-  for(let d=min;d<=max;d++) {
-    const date = new Date(today+d*86400000);
-
-    if(date.getUTCDay() !== 5) {
-      continue;
-    }
-
-    const iso = date.toISOString().slice(0,10);
-
-    html += `
-      <span class="expiry">
-        ${iso} • ${d} DTE
-      </span>
-    `;
-  }
-
-  $("expirationResults").innerHTML = `
-    <b class="gold">${min}–${max} DTE</b>
-    <div>
-      ${html || "No Friday in selected range."}
-    </div>
-    <p>
-      Calendar estimates only.
-      Not verified listed options expirations.
-      Market holidays are not checked.
-    </p>
-  `;
-}
-
-$("dte").addEventListener(
-  "change",
-  expirationCalendar
-);
-
-expirationCalendar();
-
-let currentSymbol = "SPY";
-
-function loadTradingView(symbol) {
-  currentSymbol = symbol;
-
-  const container = $("tradingview_chart");
-  container.innerHTML = "";
-
-  if(!window.TradingView) {
-    $("status").textContent =
-      "TradingView unavailable. Check connection.";
-    return;
-  }
-
-  const exchange = EXCHANGES[symbol] || "NASDAQ";
-
-  try {
-    new TradingView.widget({
-      autosize:true,
-      symbol:exchange+":"+symbol,
-      interval:"D",
-      timezone:"America/New_York",
-      theme:"dark",
-      style:"1",
-      locale:"en",
-      toolbar_bg:"#111f33",
-      enable_publishing:false,
-      hide_top_toolbar:false,
-      hide_side_toolbar:false,
-      allow_symbol_change:false,
-      save_image:false,
-      container_id:"tradingview_chart",
-      studies:[
-        "BB@tv-basicstudies",
-        "BB@tv-basicstudies"
-      ]
+    parts.forEach(function(p) {
+      if (p.type !== "literal") {
+        obj[p.type] = p.value;
+      }
     });
 
-    $("status").textContent =
-      symbol+" chart requested • "+nyTime();
-
-  } catch(error) {
-    $("status").textContent =
-      "Chart could not be loaded.";
-  }
-}
-
-function escapeHTML(value) {
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#39;");
-}
-
-function formatNumber(value) {
-  return typeof value === "number" &&
-    Number.isFinite(value)
-    ? value.toFixed(2)
-    : "Not available";
-}
-
-function validISODate(value) {
-  if(
-    typeof value !== "string" ||
-    !/^\d{4}-\d{2}-\d{2}$/.test(value)
-  ) {
-    return false;
+    return obj;
   }
 
-  const parsed = new Date(
-    value+"T00:00:00Z"
-  );
+  function todayISO() {
+    var p = nyValues();
 
-  return !Number.isNaN(parsed.getTime()) &&
-    parsed.toISOString().slice(0,10) === value;
-}
-
-function dateDifferenceDays(older,newer) {
-  return Math.round(
-    (
-      Date.parse(newer+"T12:00:00Z") -
-      Date.parse(older+"T12:00:00Z")
-    ) / 86400000
-  );
-}
-
-function validUpdateTimestamp(value) {
-  return typeof value === "string" &&
-    /(?:Z|[+-]\d{2}:\d{2})$/.test(value) &&
-    !Number.isNaN(Date.parse(value));
-}
-
-/*
-  This function checks whether a data file
-  is recent enough for display.
-
-  It does NOT independently verify:
-  - the stock exchange calendar
-  - market-data provider accuracy
-  - candle completion
-  - the signal strategy
-  - any options contract
-*/
-
-function dataFreshness(data) {
-  if(!validISODate(data.date)) {
-    return {
-      recent:false,
-      message:"INVALID MARKET DATA DATE"
-    };
+    return p.year + "-" +
+      p.month + "-" +
+      p.day;
   }
 
-  if(!validUpdateTimestamp(data.updated_at_utc)) {
-    return {
-      recent:false,
-      message:"INVALID UPDATE TIMESTAMP"
-    };
+  function updateClock() {
+    try {
+      var p = nyValues();
+
+      var iso = p.year + "-" +
+        p.month + "-" +
+        p.day;
+
+      el("todayNY").textContent = iso;
+
+      var hour = Number(p.hour) % 24;
+      var minute = Number(p.minute);
+
+      var ampm = hour >= 12 ? "PM" : "AM";
+      var h12 = hour % 12 || 12;
+
+      el("clockNY").textContent =
+        h12 + ":" +
+        String(minute).padStart(2,"0") +
+        " " + ampm + " ET";
+
+      var weekday = p.weekday;
+
+      var weekdayOpen =
+        weekday !== "Sat" &&
+        weekday !== "Sun";
+
+      var minutes = hour * 60 + minute;
+
+      var withinHours =
+        minutes >= 570 &&
+        minutes < 960;
+
+      if (!weekdayOpen) {
+        el("marketStatus").textContent =
+          "WEEKEND — CLOSED";
+      } else if (withinHours) {
+        el("marketStatus").textContent =
+          "WITHIN REGULAR MARKET HOURS*";
+      } else {
+        el("marketStatus").textContent =
+          "OUTSIDE REGULAR MARKET HOURS";
+      }
+
+    } catch(error) {
+      el("clockNY").textContent =
+        "Time unavailable";
+      el("marketStatus").textContent =
+        "Market hours not verified";
+    }
   }
 
-  const now = Date.now();
-  const updated = Date.parse(
-    data.updated_at_utc
-  );
+  function expirationCalendar() {
+    try {
+      var values = el("dte").value
+        .split("-")
+        .map(Number);
 
-  if(updated > now+5*60*1000) {
-    return {
-      recent:false,
-      message:"UPDATE TIME IS IN THE FUTURE"
-    };
+      var min = values[0];
+      var max = values[1];
+
+      var today = todayISO();
+
+      var start = Date.parse(
+        today + "T00:00:00Z"
+      );
+
+      var html = "";
+
+      for (var d = min; d <= max; d++) {
+        var date = new Date(
+          start + d * 86400000
+        );
+
+        if (date.getUTCDay() !== 5) {
+          continue;
+        }
+
+        var iso = date
+          .toISOString()
+          .slice(0,10);
+
+        html +=
+          '<span class="expiry">' +
+          iso + " • " + d + " DTE" +
+          "</span>";
+      }
+
+      el("expirationResults").innerHTML =
+        '<p class="gold">' +
+        min + "–" + max +
+        " DTE Candidates</p>" +
+        (html || "<p>No Friday found.</p>") +
+        '<p class="warning">' +
+        "Dates are estimates. Exchange holidays " +
+        "and actual listed contracts are not verified." +
+        "</p>";
+
+    } catch(error) {
+      el("expirationResults").textContent =
+        "Calendar unavailable.";
+    }
   }
 
-  const ageDays = dateDifferenceDays(
-    data.date,
-    nyDateISO()
-  );
-
-  if(ageDays < 0) {
-    return {
-      recent:false,
-      message:"MARKET DATA DATE IS IN THE FUTURE"
-    };
-  }
-
-  if(ageDays > 4) {
-    return {
-      recent:false,
-      message:"OLD MARKET DATA"
-    };
-  }
-
-  if(now-updated > 48*60*60*1000) {
-    return {
-      recent:false,
-      message:"SIGNAL FILE HAS NOT BEEN UPDATED RECENTLY"
-    };
-  }
-
-  return {
-    recent:true,
-    message:
-      ageDays === 0
-        ? "TODAY'S DATE — CANDLE COMPLETION NOT VERIFIED"
-        : "PREVIOUS DATE — VERIFY TRADING CALENDAR"
+  var exchanges = {
+    SPY:"AMEX",
+    QQQ:"NASDAQ",
+    IWM:"AMEX",
+    DIA:"AMEX",
+    TSM:"NYSE",
+    JPM:"NYSE",
+    BAC:"NYSE",
+    GS:"NYSE"
   };
-}
 
-function showUnverifiedSignal(message) {
-  $("signal").innerHTML = `
-    <span class="signal wait">WAIT</span>
+  function selectedSymbol() {
+    return el("symbol").value;
+  }
 
-    <p>
-      <strong>Today (New York):</strong>
-      ${escapeHTML(nyDateISO())}
-    </p>
+  function tradingViewSymbol(symbol) {
+    return (exchanges[symbol] || "NASDAQ") +
+      ":" + symbol;
+  }
 
-    <p>
-      <strong>Stock:</strong>
-      ${escapeHTML(currentSymbol)}
-    </p>
+  function chartLink(symbol) {
+    return "https://www.tradingview.com/chart/?symbol=" +
+      encodeURIComponent(tradingViewSymbol(symbol));
+  }
 
-    <p class="red">
-      <strong>Data Status:</strong>
-      NOT VERIFIED
-    </p>
+  var chartToken = 0;
 
-    <p>${escapeHTML(
-      message || "Daily data unavailable."
-    )}</p>
+  function loadChart(symbol) {
+    var token = ++chartToken;
 
-    <p class="warning">
-      No verified options trade is available.
-      Do not use this display as a trade entry.
-    </p>
-  `;
-}
+    var container = el("tradingview_chart");
+    var fallback = el("chartFallback");
 
-let signalRequestId = 0;
+    container.innerHTML = "";
+    fallback.style.display = "none";
 
-async function loadStockSignal() {
-  const requestId = ++signalRequestId;
-  const requestedSymbol = currentSymbol;
+    el("openChart").href = chartLink(symbol);
 
-  $("signal").innerHTML = `
-    <span class="signal wait">WAIT</span>
-    <p>
-      Checking ${escapeHTML(requestedSymbol)}
-      daily data...
-    </p>
-  `;
+    function failChart() {
+      if (token !== chartToken) return;
 
-  try {
-    const response = await fetch(
-      "./stock_signal.json?t="+Date.now(),
-      {cache:"no-store"}
+      fallback.style.display = "block";
+
+      el("status").textContent =
+        "Embedded chart unavailable. " +
+        "Use OPEN FULL CHART.";
+    }
+
+    function buildChart() {
+      if (token !== chartToken) return;
+
+      if (
+        !window.TradingView ||
+        typeof window.TradingView.widget !== "function"
+      ) {
+        failChart();
+        return;
+      }
+
+      try {
+        new window.TradingView.widget({
+          autosize:true,
+          symbol:tradingViewSymbol(symbol),
+          interval:"D",
+          timezone:"America/New_York",
+          theme:"dark",
+          style:"1",
+          locale:"en",
+          enable_publishing:false,
+          hide_side_toolbar:false,
+          allow_symbol_change:false,
+          save_image:false,
+          container_id:"tradingview_chart",
+          studies:[
+            "BB@tv-basicstudies",
+            "BB@tv-basicstudies"
+          ]
+        });
+
+        el("status").textContent =
+          symbol + " chart requested.";
+
+        /*
+          The public widget does not provide a
+          reliable chart-ready confirmation here.
+          Keep the full-chart link available.
+        */
+
+      } catch(error) {
+        failChart();
+      }
+    }
+
+    if (window.TradingView) {
+      buildChart();
+      return;
+    }
+
+    var script = document.createElement("script");
+
+    script.src =
+      "https://s3.tradingview.com/tv.js";
+
+    script.async = true;
+
+    script.onload = buildChart;
+    script.onerror = failChart;
+
+    document.head.appendChild(script);
+
+    setTimeout(function() {
+      if (
+        token === chartToken &&
+        !window.TradingView
+      ) {
+        failChart();
+      }
+    },10000);
+  }
+
+  function validDate(value) {
+    if (
+      typeof value !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(value)
+    ) {
+      return false;
+    }
+
+    var date = new Date(
+      value + "T00:00:00Z"
     );
 
-    if(!response.ok) {
-      throw new Error(
-        "Signal file unavailable"
-      );
+    return !isNaN(date.getTime()) &&
+      date.toISOString().slice(0,10) === value;
+  }
+
+  function ageDays(dateString) {
+    var today = todayISO();
+
+    return Math.round(
+      (
+        Date.parse(today + "T12:00:00Z") -
+        Date.parse(dateString + "T12:00:00Z")
+      ) / 86400000
+    );
+  }
+
+  function timestampValid(value) {
+    return typeof value === "string" &&
+      /(?:Z|[+-]\d{2}:\d{2})$/.test(value) &&
+      !isNaN(Date.parse(value));
+  }
+
+  function freshness(data) {
+    if (!validDate(data.date)) {
+      return {
+        recent:false,
+        message:"INVALID DATA DATE"
+      };
     }
 
-    const data = await response.json();
-
-    if(
-      requestId !== signalRequestId ||
-      requestedSymbol !== currentSymbol
-    ) {
-      return;
+    if (!timestampValid(data.updated_at_utc)) {
+      return {
+        recent:false,
+        message:"UPDATE TIME UNAVAILABLE"
+      };
     }
 
-    if(
-      !data ||
-      typeof data !== "object" ||
-      Array.isArray(data)
-    ) {
-      throw new Error(
-        "Invalid signal data"
-      );
-    }
+    var now = Date.now();
 
-    if(data.symbol !== requestedSymbol) {
-      showUnverifiedSignal(
-        "Available analysis is for "+
-        String(data.symbol || "another stock")+
-        ". No analysis is available for "+
-        requestedSymbol+"."
-      );
-      return;
-    }
-
-    const rawSignal = String(
-      data.signal || "WAIT"
-    ).toUpperCase();
-
-    if(
-      !["CALL","PUT","WAIT"].includes(rawSignal)
-    ) {
-      throw new Error(
-        "Invalid strategy result"
-      );
-    }
-
-    const freshness = dataFreshness(data);
-
-    const dataDate = validISODate(data.date)
-      ? data.date
-      : "Unknown";
-
-    const updatedValid = validUpdateTimestamp(
+    var updated = Date.parse(
       data.updated_at_utc
     );
 
-    const updateText = updatedValid
-      ? new Date(
-          data.updated_at_utc
-        ).toLocaleString("en-US",{
-          timeZone:"America/New_York",
-          dateStyle:"medium",
-          timeStyle:"short",
-          timeZoneName:"short"
-        })
-      : "Unknown";
+    var days = ageDays(data.date);
+
+    if (days < 0) {
+      return {
+        recent:false,
+        message:"FUTURE DATA DATE"
+      };
+    }
+
+    if (days > 4) {
+      return {
+        recent:false,
+        message:"OLD MARKET DATA"
+      };
+    }
+
+    if (updated > now + 300000) {
+      return {
+        recent:false,
+        message:"INVALID UPDATE TIME"
+      };
+    }
+
+    if (now - updated > 172800000) {
+      return {
+        recent:false,
+        message:"SIGNAL FILE NOT RECENT"
+      };
+    }
+
+    return {
+      recent:true,
+      message:
+        "RECENT FILE — MARKET DATA NOT VERIFIED"
+    };
+  }
+
+  function row(label,value) {
+    return '<div class="row">' +
+      '<span class="label">' +
+      safe(label) +
+      "</span>" +
+      '<span class="value">' +
+      safe(value) +
+      "</span>" +
+      "</div>";
+  }
+
+  function showWait(symbol,message) {
+    el("signal").innerHTML =
+      '<span class="signal wait">WAIT</span>' +
+      row("Stock",symbol) +
+      row("Today (New York)",todayISO()) +
+      row("Status","NO VERIFIED TRADE SIGNAL") +
+      '<p class="warning">' +
+      safe(message) +
+      "</p>";
+  }
+
+  var requestNumber = 0;
+
+  async function loadSignal() {
+    var symbol = selectedSymbol();
+    var requestId = ++requestNumber;
+
+    el("signal").innerHTML =
+      '<span class="signal wait">WAIT</span>' +
+      "<p>Loading " +
+      safe(symbol) +
+      " analysis...</p>";
 
     /*
-      Safety-first display:
-
-      CALL/PUT from the experimental Python
-      strategy is shown as a research result.
-
-      The prominent trade-status badge remains
-      WAIT because no independently verified
-      options contract is connected.
+      Current backend only produces SPY.
+      Never reuse SPY data for another stock.
     */
 
-    const displaySignal = "WAIT";
-
-    const resultText = freshness.recent
-      ? rawSignal
-      : "WITHHELD — DATA NOT CURRENT";
-
-    const reason = freshness.recent
-      ? String(
-          data.reason || "Not provided"
-        )
-      : "Market-data freshness requirements not met.";
-
-    $("signal").innerHTML = `
-      <span class="signal wait">
-        ${displaySignal}
-      </span>
-
-      <p>
-        <strong>Today (New York):</strong>
-        ${escapeHTML(nyDateISO())}
-      </p>
-
-      <p>
-        <strong>Market Data Date:</strong>
-        ${escapeHTML(dataDate)}
-      </p>
-
-      <p>
-        <strong>Last Updated (New York):</strong>
-        ${escapeHTML(updateText)}
-      </p>
-
-      <p>
-        <strong>Stock:</strong>
-        ${escapeHTML(requestedSymbol)}
-      </p>
-
-      <p>
-        <strong>Last Reported Daily Close:</strong>
-        ${formatNumber(data.close)}
-      </p>
-
-      <p>
-        <strong>Volume Ratio:</strong>
-        ${formatNumber(data.volume_ratio)}×
-      </p>
-
-      <p>
-        <strong>Support:</strong>
-        ${formatNumber(data.support)}
-      </p>
-
-      <p>
-        <strong>Resistance:</strong>
-        ${formatNumber(data.resistance)}
-      </p>
-
-      <p>
-        <strong>Data Status:</strong>
-        <span class="${
-          freshness.recent ? "gold" : "red"
-        }">
-          ${escapeHTML(freshness.message)}
-        </span>
-      </p>
-
-      <p>
-        <strong>Experimental Strategy Result:</strong>
-        ${escapeHTML(resultText)}
-      </p>
-
-      <p>
-        <strong>Strategy Reason:</strong>
-        ${escapeHTML(reason)}
-      </p>
-
-      <p class="warning">
-        TRADE STATUS: WAIT.
-        This is experimental stock-price
-        research, not a verified CALL or PUT
-        options trade.
-
-        The market-data source, daily candle
-        completion, strategy performance,
-        option strike, expiration and premium
-        have not been independently verified.
-      </p>
-    `;
-
-  } catch(error) {
-    if(
-      requestId === signalRequestId &&
-      requestedSymbol === currentSymbol
-    ) {
-      showUnverifiedSignal(
-        "Could not load current analysis. "+
-        "Check stock_signal.json and GitHub Actions."
+    if (symbol !== "SPY") {
+      showWait(
+        symbol,
+        "Analysis data is currently available " +
+        "only for SPY. This stock has no " +
+        "connected signal feed."
       );
+      return;
+    }
+
+    var controller = new AbortController();
+
+    var timeout = setTimeout(function() {
+      controller.abort();
+    },8000);
+
+    try {
+      var response = await fetch(
+        "./stock_signal.json?v=" + Date.now(),
+        {
+          cache:"no-store",
+          signal:controller.signal
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("File unavailable");
+      }
+
+      var data = await response.json();
+
+      if (
+        requestId !== requestNumber ||
+        selectedSymbol() !== symbol
+      ) {
+        return;
+      }
+
+      if (
+        !data ||
+        typeof data !== "object" ||
+        Array.isArray(data)
+      ) {
+        throw new Error("Invalid data");
+      }
+
+      if (data.symbol !== symbol) {
+        showWait(
+          symbol,
+          "The returned data belongs to " +
+          String(data.symbol || "another stock") +
+          "."
+        );
+        return;
+      }
+
+      var check = freshness(data);
+
+      var rawSignal = String(
+        data.signal || "WAIT"
+      ).toUpperCase();
+
+      if (
+        rawSignal !== "CALL" &&
+        rawSignal !== "PUT" &&
+        rawSignal !== "WAIT"
+      ) {
+        rawSignal = "WAIT";
+      }
+
+      var result = check.recent
+        ? rawSignal
+        : "WITHHELD";
+
+      var updated = "Unavailable";
+
+      if (timestampValid(data.updated_at_utc)) {
+        updated = new Date(
+          data.updated_at_utc
+        ).toISOString();
+      }
+
+      var html =
+        '<span class="signal wait">WAIT</span>' +
+        '<p class="pill">' +
+        "RESEARCH DATA — NOT A TRADE ALERT" +
+        "</p>" +
+        row("Stock",symbol) +
+        row("Today (New York)",todayISO()) +
+        row(
+          "Market Data Date",
+          validDate(data.date)
+            ? data.date
+            : "Unavailable"
+        ) +
+        row("File Updated (UTC)",updated) +
+        row(
+          "Reported Daily Close",
+          number(data.close,"$","")
+        ) +
+        row(
+          "Volume Ratio",
+          number(data.volume_ratio,"","×")
+        ) +
+        row(
+          "Support",
+          number(data.support,"$","")
+        ) +
+        row(
+          "Resistance",
+          number(data.resistance,"$","")
+        ) +
+        row("Data Status",check.message) +
+        row(
+          "Experimental Strategy Result",
+          result
+        ) +
+        row(
+          "Strategy Reason",
+          check.recent
+            ? String(data.reason || "Not provided")
+            : "Data freshness requirements not met."
+        ) +
+        '<p class="warning">' +
+        "TRADE STATUS: WAIT. " +
+        "This application does not verify " +
+        "daily candle completion, exchange " +
+        "holidays, live market prices or " +
+        "options contracts. " +
+        "Do not treat this result as an " +
+        "executable options signal." +
+        "</p>";
+
+      el("signal").innerHTML = html;
+
+    } catch(error) {
+      if (
+        requestId === requestNumber &&
+        selectedSymbol() === symbol
+      ) {
+        showWait(
+          symbol,
+          "Stock data could not be loaded. " +
+          "Check the GitHub Actions workflow " +
+          "and stock_signal.json."
+        );
+      }
+
+    } finally {
+      clearTimeout(timeout);
     }
   }
-}
 
-function refreshAnalysis() {
-  const symbol = $("symbol").value;
+  function analyze() {
+    var symbol = selectedSymbol();
 
-  loadTradingView(symbol);
-  loadStockSignal();
-  expirationCalendar();
-  updateClock();
-}
+    updateClock();
+    expirationCalendar();
+    loadChart(symbol);
+    loadSignal();
+  }
 
-$("symbol").addEventListener(
-  "change",
-  refreshAnalysis
-);
+  el("symbol").addEventListener(
+    "change",
+    analyze
+  );
 
-$("analyze").addEventListener(
-  "click",
-  refreshAnalysis
-);
+  el("dte").addEventListener(
+    "change",
+    expirationCalendar
+  );
 
-loadTradingView("SPY");
-loadStockSignal();
+  el("analyze").addEventListener(
+    "click",
+    analyze
+  );
 
-/*
-  Refresh the JSON file every five minutes.
+  el("refreshSignal").addEventListener(
+    "click",
+    loadSignal
+  );
 
-  This does not generate new market data.
-  GitHub Actions must update stock_signal.json.
-*/
-setInterval(loadStockSignal,300000);
+  /*
+    Each initialization is isolated so
+    one failure does not stop the others.
+  */
 
-document.addEventListener(
-  "visibilitychange",
-  () => {
-    if(!document.hidden) {
+  try {
+    updateClock();
+  } catch(error) {
+    el("clockNY").textContent =
+      "Time unavailable";
+  }
+
+  try {
+    expirationCalendar();
+  } catch(error) {
+    el("expirationResults").textContent =
+      "Calendar unavailable";
+  }
+
+  try {
+    loadChart("SPY");
+  } catch(error) {
+    el("chartFallback").style.display =
+      "block";
+  }
+
+  loadSignal();
+
+  setInterval(function() {
+    try {
       updateClock();
-      loadStockSignal();
-    }
-  }
-);
+    } catch(error) {}
+  },30000);
 
+  setInterval(function() {
+    loadSignal();
+  },300000);
+
+  document.addEventListener(
+    "visibilitychange",
+    function() {
+      if (!document.hidden) {
+        updateClock();
+        loadSignal();
+      }
+    }
+  );
+
+})();
 </script>
 
 </body>
