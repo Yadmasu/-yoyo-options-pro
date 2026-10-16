@@ -3,7 +3,7 @@
     "symbol": "SPY",
     "timeframe": "1D",
     "date": "2026-10-15",
-    "updated_at_utc": "2026-10-16T16:19:17.668680+00:00",
+    "updated_at_utc": "2026-10-16T19:10:40.837574+00:00",
     "close": 771.79,
     "volume_ratio": 1.02,
     "support": 757.971,
@@ -24,14 +24,15 @@
     "note": "Research only; not an options trade recommendation.",
     "options": {
       "status": "UNAVAILABLE",
-      "reason": "TRADIER_TOKEN not configured"
+      "reason": "HTTP Error 403: Forbidden",
+      "source": "Massive"
     }
   },
   "QQQ": {
     "symbol": "QQQ",
     "timeframe": "1D",
     "date": "2026-10-15",
-    "updated_at_utc": "2026-10-16T16:19:32.728493+00:00",
+    "updated_at_utc": "2026-10-16T19:10:56.511137+00:00",
     "close": 728.0,
     "volume_ratio": 1.45,
     "support": 715.08,
@@ -52,14 +53,15 @@
     "note": "Research only; not an options trade recommendation.",
     "options": {
       "status": "UNAVAILABLE",
-      "reason": "TRADIER_TOKEN not configured"
+      "reason": "HTTP Error 403: Forbidden",
+      "source": "Massive"
     }
   },
   "IWM": {
     "symbol": "IWM",
     "timeframe": "1D",
     "date": "2026-10-15",
-    "updated_at_utc": "2026-10-16T16:19:47.806448+00:00",
+    "updated_at_utc": "2026-10-16T19:11:11.937510+00:00",
     "close": 275.08,
     "volume_ratio": 1.27,
     "support": 270.35,
@@ -80,14 +82,15 @@
     "note": "Research only; not an options trade recommendation.",
     "options": {
       "status": "UNAVAILABLE",
-      "reason": "TRADIER_TOKEN not configured"
+      "reason": "HTTP Error 403: Forbidden",
+      "source": "Massive"
     }
   },
   "DIA": {
     "symbol": "DIA",
     "timeframe": "1D",
     "date": "2026-10-15",
-    "updated_at_utc": "2026-10-16T16:20:02.908313+00:00",
+    "updated_at_utc": "2026-10-16T19:11:27.402126+00:00",
     "close": 521.18,
     "volume_ratio": 1.11,
     "support": 504.7,
@@ -108,14 +111,15 @@
     "note": "Research only; not an options trade recommendation.",
     "options": {
       "status": "UNAVAILABLE",
-      "reason": "TRADIER_TOKEN not configured"
+      "reason": "HTTP Error 403: Forbidden",
+      "source": "Massive"
     }
   },
   "NVDA": {
     "symbol": "NVDA",
     "timeframe": "1D",
     "date": "2026-10-15",
-    "updated_at_utc": "2026-10-16T16:20:17.971527+00:00",
+    "updated_at_utc": "2026-10-16T19:11:42.830247+00:00",
     "close": 217.23,
     "volume_ratio": 1.19,
     "support": 212.85,
@@ -136,7 +140,8 @@
     "note": "Research only; not an options trade recommendation.",
     "options": {
       "status": "UNAVAILABLE",
-      "reason": "TRADIER_TOKEN not configured"
+      "reason": "HTTP Error 403: Forbidden",
+      "source": "Massive"
     }
   },
   "AAPL": {

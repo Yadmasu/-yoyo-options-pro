@@ -2,7 +2,7 @@
   "symbol": "SPY",
   "timeframe": "1D",
   "date": "2026-10-15",
-  "updated_at_utc": "2026-10-16T16:19:17.668680+00:00",
+  "updated_at_utc": "2026-10-16T19:10:40.837574+00:00",
   "close": 771.79,
   "volume_ratio": 1.02,
   "support": 757.971,
@@ -23,6 +23,7 @@
   "note": "Research only; not an options trade recommendation.",
   "options": {
     "status": "UNAVAILABLE",
-    "reason": "TRADIER_TOKEN not configured"
+    "reason": "HTTP Error 403: Forbidden",
+    "source": "Massive"
   }
 }
