@@ -2,7 +2,10 @@
   "symbol": "SPY",
   "timeframe": "1D",
   "date": "2026-10-15",
-  "updated_at_utc": "2026-10-16T04:43:33.180950+00:00",
+  "updated_at_utc": "2026-10-16T13:41:11.624245+00:00",
+  "open": 766.25,
+  "high": 772.87,
+  "low": 764.43,
   "close": 771.79,
   "bb20_2": {
     "middle": 771.106,
@@ -14,8 +17,14 @@
     "upper": 787.6254,
     "lower": 754.5866
   },
+  "support": 757.971,
+  "resistance": 781.62,
+  "volume_ratio": 1.02,
+  "volume_confirmed": false,
+  "bullish_candle": true,
+  "bearish_candle": false,
   "signal": "WAIT",
   "reason": "No confirmed setup",
   "status": "EXPERIMENTAL",
-  "note": "Stock-price analysis only. No verified option contract or premium."
+  "note": "Daily stock-price signal only. Not a verified options contract. No strike, expiration or premium."
 }
