@@ -187,6 +187,14 @@ button{
   background:#332b1b;
   line-height:1.6;
 }
+.datebox{
+  padding:15px;
+  margin-top:14px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#101e30;
+}
+.datebox p{margin:7px 0}
 footer{
   padding:25px;
   text-align:center;
@@ -218,6 +226,7 @@ footer{
     Bollinger Bands (20,2) + (20,3)<br>
     CALL / PUT / WAIT
   </p>
+
   <div class="info">
     <strong class="green">RULE-BASED ANALYSIS</strong><br>
     1D Candlestick Chart<br>
@@ -226,34 +235,57 @@ footer{
     30–45 DTE Default<br>
     No Automatic Trading
   </div>
+
+  <div class="datebox">
+    <p>
+      <strong>Today (New York):</strong>
+      <span id="todayNY">Checking...</span>
+    </p>
+    <p>
+      <strong>Current New York Time:</strong>
+      <span id="clockNY">Checking...</span>
+    </p>
+    <p class="gold">
+      Market data date may differ from today's date.
+      Only completed daily candles should be used
+      for daily-close analysis.
+    </p>
+  </div>
+
   <p class="warning">
-    Experimental research tool. A displayed CALL or PUT
-    is not a verified options contract or a guarantee
-    of profitable trading.
+    Experimental research tool.
+    CALL or PUT is not a verified options contract
+    or a guarantee of profitable trading.
   </p>
 </section>
 
 <section class="panel">
   <h2>Market & Strategy</h2>
+
   <div class="grid">
     <div>
       <label>Stock / ETF</label>
       <select id="symbol"></select>
     </div>
+
     <div>
       <label>Expiration Preference</label>
       <select id="dte">
         <option value="14-21">14–21 Days</option>
-        <option value="30-45" selected>30–45 Days</option>
+        <option value="30-45" selected>
+          30–45 Days
+        </option>
         <option value="60-90">60–90 Days</option>
       </select>
     </div>
+
     <div>
       <label>Timeframe</label>
       <select disabled>
         <option>1D • Daily</option>
       </select>
     </div>
+
     <div>
       <label>Strategy</label>
       <select disabled>
@@ -261,9 +293,11 @@ footer{
       </select>
     </div>
   </div>
+
   <button class="primary" id="analyze">
     ANALYZE 1D OPTIONS →
   </button>
+
   <div class="status" id="status">
     Select a stock to view its TradingView chart.
   </div>
@@ -272,17 +306,19 @@ footer{
 <section class="panel">
   <h2>Expiration Calendar</h2>
   <p>
-    Calendar candidates based on your selected DTE.
-    Actual listed expirations require Options Chain data.
+    Calendar candidates based on selected DTE.
+    Actual listed expirations require options-chain data.
   </p>
   <div id="expirationResults"></div>
 </section>
 
 <section class="panel">
   <h2>TradingView • Daily Chart</h2>
+
   <div class="chartbox">
     <div id="tradingview_chart"></div>
   </div>
+
   <div class="legend">
     <span>
       <i class="dot" style="background:#f5c66a"></i>
@@ -297,24 +333,29 @@ footer{
       BB (20,3)
     </span>
   </div>
+
   <p>
-    The legend describes the intended strategy.
-    TradingView indicator settings must be checked
-    manually. The embedded chart may show two
-    default BB (20,2) indicators until adjusted.
+    Legend shows intended strategy settings,
+    not confirmed chart settings.
+    The embedded chart may show two default
+    BB (20,2) indicators.
+    Verify and adjust the second to BB (20,3)
+    manually.
   </p>
 </section>
 
 <section class="panel">
   <h2>Trading Signals</h2>
+
   <div id="signal" class="result" aria-live="polite">
     <span class="signal wait">WAIT</span>
-    <p>Loading daily stock analysis...</p>
+    <p>Checking available daily stock analysis...</p>
   </div>
 </section>
 
 <section class="panel">
   <h2>Option Contract</h2>
+
   <div class="result">
     <div class="grid">
       <div class="metric">
@@ -336,39 +377,48 @@ footer{
         <small>STOP LOSS</small><strong>—</strong>
       </div>
     </div>
+
     <p>
       No verified options chain is connected.
-      Contract prices and strikes are intentionally
-      not estimated.
+      Contract prices and strikes are
+      intentionally not estimated.
     </p>
   </div>
 </section>
 
 <section class="panel">
   <h2>Strategy Rules</h2>
+
   <div class="info">
     <b class="green">CALL</b><br>
     Lower Bollinger Band reversal<br>
     Completed bullish daily candle<br>
     Support confirmation
   </div>
+
   <br>
+
   <div class="info">
     <b class="red">PUT</b><br>
     Upper Bollinger Band rejection<br>
     Completed bearish daily candle<br>
     Resistance confirmation
   </div>
+
   <br>
+
   <div class="info">
     <b class="gold">WAIT</b><br>
     No confirmed setup, unsupported symbol,
-    stale data, or market data unavailable.
+    stale data, incomplete daily candle,
+    or market data unavailable.
   </div>
+
   <p>
-    Strategy descriptions are informational.
+    These are intended strategy descriptions.
     Actual conditions depend on the Python
-    signal generator and must be validated separately.
+    signal generator and require independent
+    validation.
   </p>
 </section>
 
@@ -427,7 +477,7 @@ SYMBOLS.forEach(symbol => {
   $("symbol").add(new Option(symbol,symbol));
 });
 
-function nyParts() {
+function nyParts(date = new Date()) {
   return Object.fromEntries(
     new Intl.DateTimeFormat("en-US",{
       timeZone:"America/New_York",
@@ -435,14 +485,14 @@ function nyParts() {
       month:"2-digit",
       day:"2-digit"
     })
-    .formatToParts(new Date())
+    .formatToParts(date)
     .filter(x => x.type !== "literal")
     .map(x => [x.type,x.value])
   );
 }
 
-function nyDateISO() {
-  const p = nyParts();
+function nyDateISO(date = new Date()) {
+  const p = nyParts(date);
   return `${p.year}-${p.month}-${p.day}`;
 }
 
@@ -450,12 +500,24 @@ function nyTime() {
   return new Intl.DateTimeFormat("en-US",{
     timeZone:"America/New_York",
     dateStyle:"medium",
-    timeStyle:"short"
+    timeStyle:"short",
+    timeZoneName:"short"
   }).format(new Date());
 }
 
+function updateClock() {
+  $("todayNY").textContent = nyDateISO();
+  $("clockNY").textContent = nyTime();
+}
+
+updateClock();
+setInterval(updateClock,60000);
+
 function expirationCalendar() {
-  const [min,max] = $("dte").value.split("-").map(Number);
+  const [min,max] = $("dte").value
+    .split("-")
+    .map(Number);
+
   const parts = nyParts();
 
   const today = Date.UTC(
@@ -469,7 +531,9 @@ function expirationCalendar() {
   for(let d=min;d<=max;d++) {
     const date = new Date(today+d*86400000);
 
-    if(date.getUTCDay() !== 5) continue;
+    if(date.getUTCDay() !== 5) {
+      continue;
+    }
 
     const iso = date.toISOString().slice(0,10);
 
@@ -482,15 +546,22 @@ function expirationCalendar() {
 
   $("expirationResults").innerHTML = `
     <b class="gold">${min}–${max} DTE</b>
-    <div>${html || "No Friday in selected range."}</div>
+    <div>
+      ${html || "No Friday in selected range."}
+    </div>
     <p>
       Calendar estimates only.
-      Not verified listed option expirations.
+      Not verified listed options expirations.
+      Market holidays are not checked.
     </p>
   `;
 }
 
-$("dte").addEventListener("change",expirationCalendar);
+$("dte").addEventListener(
+  "change",
+  expirationCalendar
+);
+
 expirationCalendar();
 
 let currentSymbol = "SPY";
@@ -509,29 +580,35 @@ function loadTradingView(symbol) {
 
   const exchange = EXCHANGES[symbol] || "NASDAQ";
 
-  new TradingView.widget({
-    autosize:true,
-    symbol:exchange+":"+symbol,
-    interval:"D",
-    timezone:"America/New_York",
-    theme:"dark",
-    style:"1",
-    locale:"en",
-    toolbar_bg:"#111f33",
-    enable_publishing:false,
-    hide_top_toolbar:false,
-    hide_side_toolbar:false,
-    allow_symbol_change:false,
-    save_image:false,
-    container_id:"tradingview_chart",
-    studies:[
-      "BB@tv-basicstudies",
-      "BB@tv-basicstudies"
-    ]
-  });
+  try {
+    new TradingView.widget({
+      autosize:true,
+      symbol:exchange+":"+symbol,
+      interval:"D",
+      timezone:"America/New_York",
+      theme:"dark",
+      style:"1",
+      locale:"en",
+      toolbar_bg:"#111f33",
+      enable_publishing:false,
+      hide_top_toolbar:false,
+      hide_side_toolbar:false,
+      allow_symbol_change:false,
+      save_image:false,
+      container_id:"tradingview_chart",
+      studies:[
+        "BB@tv-basicstudies",
+        "BB@tv-basicstudies"
+      ]
+    });
 
-  $("status").textContent =
-    symbol+" chart loaded • "+nyTime();
+    $("status").textContent =
+      symbol+" chart requested • "+nyTime();
+
+  } catch(error) {
+    $("status").textContent =
+      "Chart could not be loaded.";
+  }
 }
 
 function escapeHTML(value) {
@@ -550,23 +627,6 @@ function formatNumber(value) {
     : "Not available";
 }
 
-function showUnverifiedSignal(message) {
-  $("signal").innerHTML = `
-    <span class="signal wait">WAIT</span>
-    <p><strong>Stock:</strong>
-      ${escapeHTML(currentSymbol)}</p>
-    <p><strong>Data Status:</strong>
-      NOT VERIFIED</p>
-    <p>${escapeHTML(
-      message || "Verified daily data unavailable."
-    )}</p>
-    <p>
-      No CALL or PUT signal is displayed
-      without matching and sufficiently recent data.
-    </p>
-  `;
-}
-
 function validISODate(value) {
   if(
     typeof value !== "string" ||
@@ -575,7 +635,9 @@ function validISODate(value) {
     return false;
   }
 
-  const parsed = new Date(value+"T00:00:00Z");
+  const parsed = new Date(
+    value+"T00:00:00Z"
+  );
 
   return !Number.isNaN(parsed.getTime()) &&
     parsed.toISOString().slice(0,10) === value;
@@ -596,41 +658,108 @@ function validUpdateTimestamp(value) {
     !Number.isNaN(Date.parse(value));
 }
 
-function isDataCurrent(data) {
+/*
+  This function checks whether a data file
+  is recent enough for display.
+
+  It does NOT independently verify:
+  - the stock exchange calendar
+  - market-data provider accuracy
+  - candle completion
+  - the signal strategy
+  - any options contract
+*/
+
+function dataFreshness(data) {
   if(!validISODate(data.date)) {
-    return false;
+    return {
+      recent:false,
+      message:"INVALID MARKET DATA DATE"
+    };
   }
 
   if(!validUpdateTimestamp(data.updated_at_utc)) {
-    return false;
+    return {
+      recent:false,
+      message:"INVALID UPDATE TIMESTAMP"
+    };
   }
 
   const now = Date.now();
-  const updated = Date.parse(data.updated_at_utc);
+  const updated = Date.parse(
+    data.updated_at_utc
+  );
 
-  if(updated > now + 5*60*1000) {
-    return false;
+  if(updated > now+5*60*1000) {
+    return {
+      recent:false,
+      message:"UPDATE TIME IS IN THE FUTURE"
+    };
   }
 
-  const daysOld = dateDifferenceDays(
+  const ageDays = dateDifferenceDays(
     data.date,
     nyDateISO()
   );
 
-  /*
-    This is a conservative calendar-age check.
-    Weekend/holiday handling needs an exchange
-    trading calendar for full accuracy.
-  */
-  if(daysOld < 0 || daysOld > 4) {
-    return false;
+  if(ageDays < 0) {
+    return {
+      recent:false,
+      message:"MARKET DATA DATE IS IN THE FUTURE"
+    };
+  }
+
+  if(ageDays > 4) {
+    return {
+      recent:false,
+      message:"OLD MARKET DATA"
+    };
   }
 
   if(now-updated > 48*60*60*1000) {
-    return false;
+    return {
+      recent:false,
+      message:"SIGNAL FILE HAS NOT BEEN UPDATED RECENTLY"
+    };
   }
 
-  return true;
+  return {
+    recent:true,
+    message:
+      ageDays === 0
+        ? "TODAY'S DATE — CANDLE COMPLETION NOT VERIFIED"
+        : "PREVIOUS DATE — VERIFY TRADING CALENDAR"
+  };
+}
+
+function showUnverifiedSignal(message) {
+  $("signal").innerHTML = `
+    <span class="signal wait">WAIT</span>
+
+    <p>
+      <strong>Today (New York):</strong>
+      ${escapeHTML(nyDateISO())}
+    </p>
+
+    <p>
+      <strong>Stock:</strong>
+      ${escapeHTML(currentSymbol)}
+    </p>
+
+    <p class="red">
+      <strong>Data Status:</strong>
+      NOT VERIFIED
+    </p>
+
+    <p>${escapeHTML(
+      message || "Daily data unavailable."
+    )}</p>
+
+    <p class="warning">
+      No verified options trade is available.
+      Do not use this display as a trade entry.
+    </p>
+  `;
 }
 
 let signalRequestId = 0;
@@ -641,7 +770,10 @@ async function loadStockSignal() {
 
   $("signal").innerHTML = `
     <span class="signal wait">WAIT</span>
-    <p>Checking ${escapeHTML(requestedSymbol)} data...</p>
+    <p>
+      Checking ${escapeHTML(requestedSymbol)}
+      daily data...
+    </p>
   `;
 
   try {
@@ -651,7 +783,9 @@ async function loadStockSignal() {
     );
 
     if(!response.ok) {
-      throw new Error("Signal file unavailable");
+      throw new Error(
+        "Signal file unavailable"
+      );
     }
 
     const data = await response.json();
@@ -668,14 +802,16 @@ async function loadStockSignal() {
       typeof data !== "object" ||
       Array.isArray(data)
     ) {
-      throw new Error("Invalid signal data");
+      throw new Error(
+        "Invalid signal data"
+      );
     }
 
     if(data.symbol !== requestedSymbol) {
       showUnverifiedSignal(
-        "Signal data is available only for "+
-        String(data.symbol || "an unknown symbol")+
-        ". No signal is available for "+
+        "Available analysis is for "+
+        String(data.symbol || "another stock")+
+        ". No analysis is available for "+
         requestedSymbol+"."
       );
       return;
@@ -685,22 +821,23 @@ async function loadStockSignal() {
       data.signal || "WAIT"
     ).toUpperCase();
 
-    if(!["CALL","PUT","WAIT"].includes(rawSignal)) {
-      throw new Error("Invalid signal value");
+    if(
+      !["CALL","PUT","WAIT"].includes(rawSignal)
+    ) {
+      throw new Error(
+        "Invalid strategy result"
+      );
     }
 
-    const current = isDataCurrent(data);
+    const freshness = dataFreshness(data);
 
-    const displaySignal =
-      current ? rawSignal : "WAIT";
+    const dataDate = validISODate(data.date)
+      ? data.date
+      : "Unknown";
 
-    const signalClass =
-      displaySignal === "CALL" ? "call" :
-      displaySignal === "PUT" ? "put" :
-      "wait";
-
-    const updatedValid =
-      validUpdateTimestamp(data.updated_at_utc);
+    const updatedValid = validUpdateTimestamp(
+      data.updated_at_utc
+    );
 
     const updateText = updatedValid
       ? new Date(
@@ -713,24 +850,37 @@ async function loadStockSignal() {
         })
       : "Unknown";
 
-    const dataDate = validISODate(data.date)
-      ? data.date
-      : "Unknown";
+    /*
+      Safety-first display:
 
-    const reason = !current
-      ? "Data freshness could not be confirmed."
-      : String(
-          data.reason || "No reason provided"
-        );
+      CALL/PUT from the experimental Python
+      strategy is shown as a research result.
+
+      The prominent trade-status badge remains
+      WAIT because no independently verified
+      options contract is connected.
+    */
+
+    const displaySignal = "WAIT";
+
+    const resultText = freshness.recent
+      ? rawSignal
+      : "WITHHELD — DATA NOT CURRENT";
+
+    const reason = freshness.recent
+      ? String(
+          data.reason || "Not provided"
+        )
+      : "Market-data freshness requirements not met.";
 
     $("signal").innerHTML = `
-      <span class="signal ${signalClass}">
+      <span class="signal wait">
         ${displaySignal}
       </span>
 
       <p>
-        <strong>Stock:</strong>
-        ${escapeHTML(requestedSymbol)}
+        <strong>Today (New York):</strong>
+        ${escapeHTML(nyDateISO())}
       </p>
 
       <p>
@@ -744,7 +894,12 @@ async function loadStockSignal() {
       </p>
 
       <p>
-        <strong>Last Daily Close:</strong>
+        <strong>Stock:</strong>
+        ${escapeHTML(requestedSymbol)}
+      </p>
+
+      <p>
+        <strong>Last Reported Daily Close:</strong>
         ${formatNumber(data.close)}
       </p>
 
@@ -765,33 +920,33 @@ async function loadStockSignal() {
 
       <p>
         <strong>Data Status:</strong>
-        <span class="${current ? "green" : "red"}">
-          ${
-            current
-              ? "RECENT DATA — NOT INDEPENDENTLY VERIFIED"
-              : "STALE / UNAVAILABLE"
-          }
+        <span class="${
+          freshness.recent ? "gold" : "red"
+        }">
+          ${escapeHTML(freshness.message)}
         </span>
       </p>
 
       <p>
-        <strong>Strategy Result:</strong>
-        ${escapeHTML(rawSignal)}
-        (Experimental)
+        <strong>Experimental Strategy Result:</strong>
+        ${escapeHTML(resultText)}
       </p>
 
       <p>
-        <strong>Reason:</strong>
+        <strong>Strategy Reason:</strong>
         ${escapeHTML(reason)}
       </p>
 
       <p class="warning">
-        Experimental stock-price analysis only.
-        The displayed signal is not a verified
-        options trade recommendation.
-        Confirm market data, candle completion,
-        indicator settings and option contract
-        independently before trading.
+        TRADE STATUS: WAIT.
+        This is experimental stock-price
+        research, not a verified CALL or PUT
+        options trade.
+
+        The market-data source, daily candle
+        completion, strategy performance,
+        option strike, expiration and premium
+        have not been independently verified.
       </p>
     `;
 
@@ -801,7 +956,7 @@ async function loadStockSignal() {
       requestedSymbol === currentSymbol
     ) {
       showUnverifiedSignal(
-        "Signal data could not be loaded. "+
+        "Could not load current analysis. "+
         "Check stock_signal.json and GitHub Actions."
       );
     }
@@ -813,6 +968,8 @@ function refreshAnalysis() {
 
   loadTradingView(symbol);
   loadStockSignal();
+  expirationCalendar();
+  updateClock();
 }
 
 $("symbol").addEventListener(
@@ -827,6 +984,24 @@ $("analyze").addEventListener(
 
 loadTradingView("SPY");
 loadStockSignal();
+
+/*
+  Refresh the JSON file every five minutes.
+
+  This does not generate new market data.
+  GitHub Actions must update stock_signal.json.
+*/
+setInterval(loadStockSignal,300000);
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+    if(!document.hidden) {
+      updateClock();
+      loadStockSignal();
+    }
+  }
+);
 
 </script>
 
