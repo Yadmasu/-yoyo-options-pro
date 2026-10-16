@@ -541,6 +541,10 @@ async function loadStockSignal() {
 }
 
 loadStockSignal();
+
+$("symbol").addEventListener("change", () => {
+  loadStockSignal();
+});
 </script>
 
 </body>
